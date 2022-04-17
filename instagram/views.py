@@ -31,6 +31,11 @@ class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
+    def perform_create(self, serializer):
+        author = self.request.user
+        ip = self.request.META['REMOTE_ADDR']
+        serializer.save(author = author,ip=ip)
+
     @action(detail=False,methods=['GET'])
     def public(self,request):
         qs = self.get_queryset().filter(is_public=True)
@@ -54,3 +59,4 @@ class PostViewSet(ModelViewSet):
 
 # def post_detail(request):
 #     pass
+
