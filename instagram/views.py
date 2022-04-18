@@ -6,7 +6,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from .serializers import PostSerializer
 from .models import Post
-
+from rest_framework.permissions import IsAuthenticated
+from .permissions import IsAuthorOrReadonly
 # class PublicPostListAPIView(generics.ListAPIView):
 #     queryset = Post.objects.filter(is_public = True)
 #     serializer_class = PostSerializer
@@ -30,6 +31,7 @@ def public_post_list(request):
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated,IsAuthorOrReadonly]
 
     def perform_create(self, serializer):
         author = self.request.user
