@@ -8,6 +8,7 @@ from .serializers import PostSerializer
 from .models import Post
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAuthorOrReadonly
+from rest_framework.filters import SearchFilter,OrderingFilter
 # class PublicPostListAPIView(generics.ListAPIView):
 #     queryset = Post.objects.filter(is_public = True)
 #     serializer_class = PostSerializer
@@ -32,6 +33,10 @@ class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated,IsAuthorOrReadonly]
+
+    filter_backends = [SearchFilter,OrderingFilter]
+    search_fields = ['message']
+
 
     def perform_create(self, serializer):
         author = self.request.user
